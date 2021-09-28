@@ -15,6 +15,9 @@ import img4 from './img/4.png'
 // import * as reach from '@reach-sh/stdlib/ETH';
 import {loadStdlib} from '@reach-sh/stdlib';
 const reach = loadStdlib(process.env);
+reach.setProviderByName('TestNet')
+// const now = await reach.getNetworkTime()
+// reach.setQueryLowerBound(reach.sub(now,2000))
 // const stdlib = loadStdlib(process.env);
 
 const {standardUnit} = reach;
