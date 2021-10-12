@@ -104,9 +104,9 @@ const Player = {
   getStep: Fun([Board_type], UInt),
   informTimeout: Fun([], Null),
   getId: Fun([], UInt),
-  getUrl: Fun([], Bytes(128)),
-  preview: Fun([UInt, Bytes(128)], Null),
-  showEnd: Fun([Board_type, UInt, Address, Bytes(128)], Null)
+  getUrl: Fun([], Bytes(64)),
+  preview: Fun([UInt, Bytes(64)], Null),
+  showEnd: Fun([Board_type, UInt, Address, Bytes(64)], Null)
 };
 const Alice = {
   ...Player,
@@ -119,7 +119,7 @@ const Bob = {
 }
 const Nft = 
       { owner: Address,
-        url: Bytes(128) };
+        url: Bytes(64) };
 
 export const main = Reach.App(
   {}, [Participant('Alice', Alice), Participant('Bob', Bob), View('NFT', Nft)],
@@ -139,14 +139,18 @@ export const main = Reach.App(
     B.only(() => {
       interact.acceptWager(wager); });
     B.pay(wager)
-     .timeout(deadline, () => closeTo(A, informTimeout));
+     .timeout(relativeTime(deadline), () => closeTo(A, informTimeout));
 
     commit();
     A.only(() => {
       const id = declassify(interact.getId());
       const url = declassify(interact.getUrl());
     });
-    A.publish(id, url);
+    A.publish(id)
+    .timeout(relativeTime(deadline), () => closeTo(A, informTimeout));
+    commit();
+    A.publish(url)
+    .timeout(relativeTime(deadline), () => closeTo(A, informTimeout));
     each([A, B], () => {
       interact.preview(id, url);
     });
@@ -159,7 +163,7 @@ export const main = Reach.App(
         A.only(() => {
           const Aplay = getValidPlay(interact,board);});
         A.publish(Aplay)
-         .timeout(deadline, () => closeTo(B, informTimeout));
+         .timeout(relativeTime(deadline), () => closeTo(B, informTimeout));
 
         board = step(board, Aplay);   
         continue;
@@ -169,7 +173,7 @@ export const main = Reach.App(
         B.only(() => {
           const Bplay = getValidPlay(interact,board);});
         B.publish(Bplay)
-         .timeout(deadline, () => closeTo(A, informTimeout));
+         .timeout(relativeTime(deadline), () => closeTo(A, informTimeout));
 
         board = step(board, Bplay);
         continue; 

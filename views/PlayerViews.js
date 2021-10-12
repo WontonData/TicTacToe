@@ -31,6 +31,16 @@ exports.GetHand = class extends React.Component {
   }
 }
 
+exports.GenNtf = class extends React.Component {
+  render() {
+    return (
+      <div>
+        nft is being generated
+      </div>
+    );
+  }
+}
+
 class Square extends React.Component {
   render() {
     return (
@@ -112,7 +122,7 @@ exports.GetStep = class extends React.Component {
       <div className="board">
         <div className="bet">
           <img src={this.state.url} />
-          <div class="card-date">
+          <div className="card-date">
             NTFID:{this.state.nft_id.toString().substr(0, 7) + "..."}
           </div>
           <p>Games for it!</p>

@@ -14,10 +14,11 @@ import img4 from './img/4.png'
 
 // import * as reach from '@reach-sh/stdlib/ETH';
 import {loadStdlib} from '@reach-sh/stdlib';
-const reach = loadStdlib(process.env);
+const reach = loadStdlib({
+  REACH_CONNECTOR_MODE: 'CFX'
+});
 reach.setProviderByName('TestNet')
-// const now = await reach.getNetworkTime()
-// reach.setQueryLowerBound(reach.sub(now,2000))
+
 // const stdlib = loadStdlib(process.env);
 
 const {standardUnit} = reach;
@@ -40,6 +41,8 @@ class App extends React.Component {
     this.state = {view: 'ConnectAccount', ...defaults};
   }
   async componentDidMount() {
+    const now = await reach.getNetworkTime()
+    reach.setQueryLowerBound(reach.sub(now,2000))
     acc = await reach.getDefaultAccount(); 
     const balAtomic = await reach.balanceOf(acc);
     const bal = reach.formatCurrency(balAtomic, 4);
@@ -86,7 +89,8 @@ class Player extends React.Component {
   }
   playStep(step) {this.state.resolveStep(step)}
   informTimeout() { this.setState({view: 'Timeout'}); }
-  getId() {     
+  getId() {
+    this.setState({view: 'GenNtf'})
     const id = reach.randomUInt();
     console.log(` Alice makes id #${id}`);
     return id; 
