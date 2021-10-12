@@ -104,9 +104,9 @@ const Player = {
   getStep: Fun([Board_type], UInt),
   informTimeout: Fun([], Null),
   getId: Fun([], UInt),
-  getUrl: Fun([], Bytes(64)),
-  preview: Fun([UInt, Bytes(64)], Null),
-  showEnd: Fun([Board_type, UInt, Address, Bytes(64)], Null)
+  getUrl: Fun([], Array(UInt,32)),
+  preview: Fun([UInt, Array(UInt,32)], Null),
+  showEnd: Fun([Board_type, UInt, Address, Array(UInt,32)], Null)
 };
 const Alice = {
   ...Player,
@@ -119,7 +119,7 @@ const Bob = {
 }
 const Nft = 
       { owner: Address,
-        url: Bytes(64) };
+        url: Array(UInt,32) };
 
 export const main = Reach.App(
   {}, [Participant('Alice', Alice), Participant('Bob', Bob), View('NFT', Nft)],
